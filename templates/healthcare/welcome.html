@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to MEDORA{% endblock %}
+
+{% block content %}
+<div class="min-vh-100" style="background: linear-gradient(135deg, #0f766e, #059669);">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-lg-10">
+                <!-- Header -->
+                <div class="text-center text-white mb-5">
+                    <h1 class="display-3 fw-bold mb-4">Welcome to <span class="text-warning">MEDORA</span></h1>
+                    <p class="lead fs-4 mb-5">Seamless Healthcare Management for Every Role</p>
+                </div>
+                
+                <!-- Role Cards -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card role-card h-100 text-center">
+                            <div class="card-body p-4">
+                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-shield-alt fa-2x text-primary"></i>
+                                </div>
+                                <h5 class="card-title fw-bold">Super Admin</h5>
+                                <p class="card-text text-muted small mb-4">System administration and user management</p>
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'login' %}?role=super_admin" class="btn btn-primary">Sign In</a>
+                                    <a href="{% url 'register' 'super_admin' %}" class="btn btn-outline-primary">Register</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card role-card h-100 text-center">
+                            <div class="card-body p-4">
+                                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-stethoscope fa-2x text-success"></i>
+                                </div>
+                                <h5 class="card-title fw-bold">Doctor</h5>
+                                <p class="card-text text-muted small mb-4">Patient care and medical consultations</p>
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'login' %}?role=doctor" class="btn btn-success">Sign In</a>
+                                    <a href="{% url 'register' 'doctor' %}" class="btn btn-outline-success">Register</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card role-card h-100 text-center">
+                            <div class="card-body p-4">
+                                <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-heart fa-2x text-info"></i>
+                                </div>
+                                <h5 class="card-title fw-bold">Nurse</h5>
+                                <p class="card-text text-muted small mb-4">Patient care and daily health monitoring</p>
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'login' %}?role=nurse" class="btn btn-info">Sign In</a>
+                                    <a href="{% url 'register' 'nurse' %}" class="btn btn-outline-info">Register</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card role-card h-100 text-center">
+                            <div class="card-body p-4">
+                                <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-user fa-2x text-warning"></i>
+                                </div>
+                                <h5 class="card-title fw-bold">Patient</h5>
+                                <p class="card-text text-muted small mb-4">Access your health records and appointments</p>
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'login' %}?role=patient" class="btn btn-warning">Sign In</a>
+                                    <a href="{% url 'register' 'patient' %}" class="btn btn-outline-warning">Register</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Features Section -->
+                <div class="row text-center text-white">
+                    <div class="col-md-4 mb-4">
+                        <div class="bg-white bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-shield-alt fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold">Secure & Compliant</h5>
+                        <p class="opacity-75">Enterprise-grade security with role-based access control</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="bg-white bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-heart fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold">Patient-Centered</h5>
+                        <p class="opacity-75">Streamlined workflows focused on quality patient care</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="bg-white bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-stethoscope fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold">Integrated Platform</h5>
+                        <p class="opacity-75">All healthcare management tools in one unified system</p>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="text-center text-white mt-5 pt-4 border-top border-white border-opacity-25">
+                    <p class="mb-0 opacity-75">Built with ❤️ for Healthcare Management | <span class="fw-bold">Team MEDORA</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

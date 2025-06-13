@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile_user.get_full_name }} - MEDORA{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                {% if profile_user.avatar %}
+                    <img src="{{ profile_user.avatar.url }}" alt="Avatar" class="rounded-circle mb-3" width="120" height="120">
+                {% else %}
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                        <i class="fas fa-user fa-3x text-primary"></i>
+                    </div>
+                {% endif %}
+                
+                <h4>{{ profile_user.get_full_name }}</h4>
+                <p class="text-muted">{{ profile_user.get_role_display }}</p>
+                
+                <div class="d-grid gap-2">
+                    {% if profile_user.is_active %}
+                        <span class="badge bg-success">Active</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inactive</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">User Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Username:</strong> {{ profile_user.username }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Email:</strong> {{ profile_user.email }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Phone:</strong> {{ profile_user.phone|default:"Not provided" }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Date of Birth:</strong> {{ profile_user.date_of_birth|default:"Not provided" }}
+                    </div>
+                </div>
+                
+                {% if profile_user.address %}
+                <div class="mb-3">
+                    <strong>Address:</strong>
+                    <p class="mt-1">{{ profile_user.address }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Joined:</strong> {{ profile_user.date_joined|date:"F d, Y" }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Last Login:</strong> 
+                        {% if profile_user.last_login %}
+                            {{ profile_user.last_login|date:"F d, Y g:i A" }}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activity Summary -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">Activity Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    {% if profile_user.role == 'patient' %}
+                    <div class="col-md-4">
+                        <h4 class="text-primary">{{ profile_user.patient_appointments.count }}</h4>
+                        <p class="text-muted">Appointments</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-success">{{ profile_user.medical_records.count }}</h4>
+                        <p class="text-muted">Medical Records</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-info">{{ profile_user.vital_signs.count }}</h4>
+                        <p class="text-muted">Vital Signs</p>
+                    </div>
+                    {% elif profile_user.role == 'doctor' %}
+                    <div class="col-md-4">
+                        <h4 class="text-primary">{{ profile_user.doctor_appointments.count }}</h4>
+                        <p class="text-muted">Appointments</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-success">{{ profile_user.created_records.count }}</h4>
+                        <p class="text-muted">Records Created</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-info">{{ profile_user.recorded_vitals.count }}</h4>
+                        <p class="text-muted">Vitals Recorded</p>
+                    </div>
+                    {% elif profile_user.role == 'nurse' %}
+                    <div class="col-md-4">
+                        <h4 class="text-primary">{{ profile_user.assigned_tasks.count }}</h4>
+                        <p class="text-muted">Tasks Assigned</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-success">{{ profile_user.assigned_tasks.filter(status='completed').count }}</h4>
+                        <p class="text-muted">Tasks Completed</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-info">{{ profile_user.recorded_vitals.count }}</h4>
+                        <p class="text-muted">Vitals Recorded</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

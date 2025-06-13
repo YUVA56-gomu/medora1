@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Vital Signs - MEDORA{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Vital Signs</h2>
+    {% if user.role in 'nurse,doctor' %}
+    <a href="{% url 'vitals_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Record Vitals
+    </a>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for vital in vitals %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="card-title">{{ vital.patient.get_full_name }}</h5>
+                    <small class="text-muted">{{ vital.recorded_at|date:"M d, Y" }}</small>
+                </div>
+                
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">Blood Pressure</small>
+                            <strong>{{ vital.blood_pressure }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">Heart Rate</small>
+                            <strong>{{ vital.heart_rate }} bpm</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">Temperature</small>
+                            <strong>{{ vital.temperature }}°F</strong>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">Oxygen Sat</small>
+                            <strong>{{ vital.oxygen_saturation }}%</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if vital.weight or vital.height %}
+                <div class="row text-center mb-3">
+                    {% if vital.weight %}
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">Weight</small>
+                            <strong>{{ vital.weight }} lbs</strong>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if vital.height %}
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">Height</small>
+                            <strong>{{ vital.height }} cm</strong>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% if vital.notes %}
+                <p class="card-text">
+                    <strong>Notes:</strong> {{ vital.notes|truncatewords:15 }}
+                </p>
+                {% endif %}
+                
+                <small class="text-muted">
+                    Recorded by {{ vital.recorded_by.get_full_name }}
+                </small>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="text-center py-5">
+            <i class="fas fa-heartbeat fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No vital signs recorded</h5>
+            {% if user.role in 'nurse,doctor' %}
+            <p class="text-muted">Record your first vital signs to get started.</p>
+            <a href="{% url 'vitals_create' %}" class="btn btn-primary">Record Vitals</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

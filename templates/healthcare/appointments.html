@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Appointments - MEDORA{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Appointments</h2>
+    {% if user.role == 'patient' or user.role == 'doctor' %}
+    <a href="{% url 'appointment_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Book Appointment
+    </a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if appointments %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        {% if user.role != 'patient' %}
+                        <th>Patient</th>
+                        {% endif %}
+                        {% if user.role != 'doctor' %}
+                        <th>Doctor</th>
+                        {% endif %}
+                        <th>Date & Time</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        {% if user.role != 'patient' %}
+                        <td>{{ appointment.patient.get_full_name }}</td>
+                        {% endif %}
+                        {% if user.role != 'doctor' %}
+                        <td>{{ appointment.doctor.get_full_name }}</td>
+                        {% endif %}
+                        <td>
+                            {{ appointment.date }}<br>
+                            <small class="text-muted">{{ appointment.time }}</small>
+                        </td>
+                        <td>{{ appointment.type }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if appointment.status == 'approved' %}bg-success
+                                {% elif appointment.status == 'pending' %}bg-warning
+                                {% elif appointment.status == 'completed' %}bg-info
+                                {% elif appointment.status == 'rejected' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ appointment.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if user.role == 'doctor' and appointment.status == 'pending' %}
+                            <a href="{% url 'appointment_approve' appointment.pk %}" class="btn btn-sm btn-success me-1">
+                                <i class="fas fa-check"></i>
+                            </a>
+                            <a href="{% url 'appointment_reject' appointment.pk %}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            {% elif user.role == 'patient' and appointment.status == 'pending' %}
+                            <a href="{% url 'appointment_update' appointment.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No appointments found</h5>
+            {% if user.role == 'patient' %}
+            <p class="text-muted">Book your first appointment to get started.</p>
+            <a href="{% url 'appointment_create' %}" class="btn btn-primary">Book Appointment</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

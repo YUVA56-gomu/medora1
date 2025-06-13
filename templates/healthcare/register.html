@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Register - MEDORA{% endblock %}
+
+{% block content %}
+<div class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(135deg, #0f766e, #059669);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                {% if role == 'super_admin' %}
+                                    <i class="fas fa-shield-alt fa-2x text-primary"></i>
+                                {% elif role == 'doctor' %}
+                                    <i class="fas fa-stethoscope fa-2x text-success"></i>
+                                {% elif role == 'nurse' %}
+                                    <i class="fas fa-heart fa-2x text-info"></i>
+                                {% else %}
+                                    <i class="fas fa-user fa-2x text-warning"></i>
+                                {% endif %}
+                            </div>
+                            <h2 class="fw-bold">{{ role|title }} Registration</h2>
+                            <p class="text-muted">Create your MEDORA account</p>
+                        </div>
+                        
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                        </form>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted">Already have an account? 
+                                <a href="{% url 'login' %}" class="text-primary text-decoration-none">Sign in here</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

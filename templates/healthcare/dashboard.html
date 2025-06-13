@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - MEDORA{% endblock %}
+
+{% block content %}
+<div class="welcome-section">
+    <h1 class="h3 mb-2">
+        {% if user.role == 'super_admin' %}
+            Welcome back, Admin!
+        {% elif user.role == 'doctor' %}
+            Good day, Dr. {{ user.last_name }}!
+        {% elif user.role == 'nurse' %}
+            Hello, {{ user.first_name }}!
+        {% else %}
+            Welcome back, {{ user.first_name }}!
+        {% endif %}
+    </h1>
+    <p class="mb-0 opacity-90">
+        {% if user.role == 'super_admin' %}
+            System running smoothly with {{ total_users }} active users and {{ total_appointments }} scheduled appointments.
+        {% elif user.role == 'doctor' %}
+            You have {{ my_appointments.count }} appointments and {{ pending_approvals.count }} pending approvals.
+        {% elif user.role == 'nurse' %}
+            You have {{ pending_tasks }} pending tasks and {{ today_tasks }} tasks scheduled for today.
+        {% else %}
+            You have {{ upcoming_appointments }} upcoming appointments and {{ my_records.count }} medical records available.
+        {% endif %}
+    </p>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    {% if user.role == 'super_admin' %}
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Total Users</h6>
+                            <h3 class="mb-0">{{ total_users }}</h3>
+                        </div>
+                        <i class="fas fa-users fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Doctors</h6>
+                            <h3 class="mb-0">{{ system_stats.doctors }}</h3>
+                        </div>
+                        <i class="fas fa-stethoscope fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Nurses</h6>
+                            <h3 class="mb-0">{{ system_stats.nurses }}</h3>
+                        </div>
+                        <i class="fas fa-heart fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Patients</h6>
+                            <h3 class="mb-0">{{ system_stats.patients }}</h3>
+                        </div>
+                        <i class="fas fa-user fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elif user.role == 'doctor' %}
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">My Appointments</h6>
+                            <h3 class="mb-0">{{ my_appointments.count }}</h3>
+                        </div>
+                        <i class="fas fa-calendar-alt fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Pending Approvals</h6>
+                            <h3 class="mb-0">{{ pending_approvals.count }}</h3>
+                        </div>
+                        <i class="fas fa-clock fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">My Patients</h6>
+                            <h3 class="mb-0">{{ my_patients.count }}</h3>
+                        </div>
+                        <i class="fas fa-users fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elif user.role == 'nurse' %}
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">My Tasks</h6>
+                            <h3 class="mb-0">{{ my_tasks.count }}</h3>
+                        </div>
+                        <i class="fas fa-tasks fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Pending Tasks</h6>
+                            <h3 class="mb-0">{{ pending_tasks }}</h3>
+                        </div>
+                        <i class="fas fa-clock fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Today's Tasks</h6>
+                            <h3 class="mb-0">{{ today_tasks }}</h3>
+                        </div>
+                        <i class="fas fa-calendar-day fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Upcoming Appointments</h6>
+                            <h3 class="mb-0">{{ upcoming_appointments }}</h3>
+                        </div>
+                        <i class="fas fa-calendar-alt fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Medical Records</h6>
+                            <h3 class="mb-0">{{ my_records.count }}</h3>
+                        </div>
+                        <i class="fas fa-file-medical fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Health Score</h6>
+                            <h3 class="mb-0">85%</h3>
+                        </div>
+                        <i class="fas fa-heartbeat fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Main Content -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    {% if user.role == 'super_admin' %}
+                        Recent Users
+                    {% elif user.role == 'doctor' %}
+                        Recent Appointments
+                    {% elif user.role == 'nurse' %}
+                        My Tasks
+                    {% else %}
+                        My Appointments
+                    {% endif %}
+                </h5>
+                <a href="
+                    {% if user.role == 'super_admin' %}{% url 'users' %}
+                    {% elif user.role == 'doctor' %}{% url 'appointments' %}
+                    {% elif user.role == 'nurse' %}{% url 'tasks' %}
+                    {% else %}{% url 'appointments' %}{% endif %}" 
+                   class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if user.role == 'super_admin' %}
+                    {% for recent_user in recent_users %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">{{ recent_user.get_full_name }}</h6>
+                            <small class="text-muted">{{ recent_user.get_role_display }} • {{ recent_user.date_joined|date:"M d, Y" }}</small>
+                        </div>
+                        <span class="badge bg-success">Active</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center">No recent users</p>
+                    {% endfor %}
+                {% elif user.role == 'doctor' %}
+                    {% for appointment in my_appointments %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="fas fa-calendar text-success"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">{{ appointment.patient.get_full_name }}</h6>
+                            <small class="text-muted">{{ appointment.date }} at {{ appointment.time }} • {{ appointment.type }}</small>
+                        </div>
+                        <span class="badge badge-status 
+                            {% if appointment.status == 'approved' %}bg-success
+                            {% elif appointment.status == 'pending' %}bg-warning
+                            {% else %}bg-secondary{% endif %}">
+                            {{ appointment.get_status_display }}
+                        </span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center">No recent appointments</p>
+                    {% endfor %}
+                {% elif user.role == 'nurse' %}
+                    {% for task in my_tasks %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="fas fa-tasks text-info"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">{{ task.title }}</h6>
+                            <small class="text-muted">Due: {{ task.due_date }} • Priority: {{ task.get_priority_display }}</small>
+                        </div>
+                        <span class="badge badge-status 
+                            {% if task.status == 'completed' %}bg-success
+                            {% elif task.status == 'in_progress' %}bg-primary
+                            {% else %}bg-warning{% endif %}">
+                            {{ task.get_status_display }}
+                        </span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center">No tasks assigned</p>
+                    {% endfor %}
+                {% else %}
+                    {% for appointment in my_appointments %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="fas fa-calendar text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">{{ appointment.doctor.get_full_name }}</h6>
+                            <small class="text-muted">{{ appointment.date }} at {{ appointment.time }} • {{ appointment.type }}</small>
+                        </div>
+                        <span class="badge badge-status 
+                            {% if appointment.status == 'approved' %}bg-success
+                            {% elif appointment.status == 'pending' %}bg-warning
+                            {% else %}bg-secondary{% endif %}">
+                            {{ appointment.get_status_display }}
+                        </span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center">No appointments scheduled</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Notifications</h5>
+            </div>
+            <div class="card-body">
+                {% for notification in notifications %}
+                <div class="d-flex align-items-start mb-3">
+                    <div class="bg-{{ notification.type }} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 32px; height: 32px;">
+                        {% if notification.type == 'success' %}
+                            <i class="fas fa-check text-success"></i>
+                        {% elif notification.type == 'warning' %}
+                            <i class="fas fa-exclamation text-warning"></i>
+                        {% elif notification.type == 'error' %}
+                            <i class="fas fa-times text-danger"></i>
+                        {% else %}
+                            <i class="fas fa-info text-info"></i>
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 fs-6">{{ notification.title }}</h6>
+                        <p class="mb-1 small text-muted">{{ notification.message|truncatewords:10 }}</p>
+                        <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center">No new notifications</p>
+                {% endfor %}
+                
+                {% if notifications %}
+                <div class="text-center mt-3">
+                    <a href="{% url 'notifications' %}" class="btn btn-sm btn-outline-primary">View All Notifications</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

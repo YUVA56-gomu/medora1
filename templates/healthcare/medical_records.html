@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Medical Records - MEDORA{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Medical Records</h2>
+    {% if user.role == 'doctor' %}
+    <a href="{% url 'medical_record_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Add Record
+    </a>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for record in records %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="card-title">{{ record.diagnosis }}</h5>
+                    <small class="text-muted">{{ record.date }}</small>
+                </div>
+                
+                <h6 class="text-muted mb-2">
+                    {% if user.role != 'patient' %}
+                    Patient: {{ record.patient.get_full_name }}
+                    {% endif %}
+                    {% if user.role != 'doctor' %}
+                    Doctor: {{ record.doctor.get_full_name }}
+                    {% endif %}
+                </h6>
+                
+                <p class="card-text">
+                    <strong>Treatment:</strong> {{ record.treatment|truncatewords:10 }}<br>
+                    <strong>Prescription:</strong> {{ record.prescription|truncatewords:10 }}
+                </p>
+                
+                {% if record.notes %}
+                <p class="card-text">
+                    <strong>Notes:</strong> {{ record.notes|truncatewords:15 }}
+                </p>
+                {% endif %}
+                
+                <a href="{% url 'medical_record_detail' record.pk %}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye me-1"></i>View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="text-center py-5">
+            <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No medical records found</h5>
+            {% if user.role == 'doctor' %}
+            <p class="text-muted">Create your first medical record to get started.</p>
+            <a href="{% url 'medical_record_create' %}" class="btn btn-primary">Add Record</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
