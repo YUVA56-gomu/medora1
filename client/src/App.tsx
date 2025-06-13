@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'wouter';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import Layout from './components/common/Layout';
@@ -15,7 +14,7 @@ const DashboardRouter: React.FC = () => {
   const { user } = useAuth();
 
   if (!user) {
-    return <Navigate to="/" replace />;
+    return <Redirect to="/" />;
   }
 
   switch (user.role) {
@@ -28,7 +27,7 @@ const DashboardRouter: React.FC = () => {
     case 'patient':
       return <PatientDashboard />;
     default:
-      return <Navigate to="/" replace />;
+      return <Redirect to="/" />;
   }
 };
 
@@ -37,63 +36,63 @@ const App: React.FC = () => {
     <AuthProvider>
       <DataProvider>
         <Router>
-          <Routes>
+          <Switch>
             {/* Public Routes */}
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/login/super_admin" element={<LoginPage role="super_admin" />} />
-            <Route path="/login/doctor" element={<LoginPage role="doctor" />} />
-            <Route path="/login/nurse" element={<LoginPage role="nurse" />} />
-            <Route path="/login/patient" element={<LoginPage role="patient" />} />
+            <Route path="/">
+              <WelcomePage />
+            </Route>
+            <Route path="/login/super_admin">
+              <LoginPage role="super_admin" />
+            </Route>
+            <Route path="/login/doctor">
+              <LoginPage role="doctor" />
+            </Route>
+            <Route path="/login/nurse">
+              <LoginPage role="nurse" />
+            </Route>
+            <Route path="/login/patient">
+              <LoginPage role="patient" />
+            </Route>
 
             {/* Protected Dashboard Route */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Layout>
-                    <DashboardRouter />
-                  </Layout>
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/dashboard">
+              <ProtectedRoute>
+                <Layout>
+                  <DashboardRouter />
+                </Layout>
+              </ProtectedRoute>
+            </Route>
 
             {/* Role-specific protected routes */}
-            <Route
-              path="/users"
-              element={
-                <ProtectedRoute allowedRoles={['super_admin']}>
-                  <Layout>
-                    <SuperAdminDashboard />
-                  </Layout>
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/users">
+              <ProtectedRoute allowedRoles={['super_admin']}>
+                <Layout>
+                  <SuperAdminDashboard />
+                </Layout>
+              </ProtectedRoute>
+            </Route>
 
-            <Route
-              path="/appointments"
-              element={
-                <ProtectedRoute allowedRoles={['doctor', 'nurse']}>
-                  <Layout>
-                    <DoctorDashboard />
-                  </Layout>
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/appointments">
+              <ProtectedRoute allowedRoles={['doctor', 'nurse']}>
+                <Layout>
+                  <DoctorDashboard />
+                </Layout>
+              </ProtectedRoute>
+            </Route>
 
-            <Route
-              path="/my-appointments"
-              element={
-                <ProtectedRoute allowedRoles={['patient']}>
-                  <Layout>
-                    <PatientDashboard />
-                  </Layout>
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/my-appointments">
+              <ProtectedRoute allowedRoles={['patient']}>
+                <Layout>
+                  <PatientDashboard />
+                </Layout>
+              </ProtectedRoute>
+            </Route>
 
             {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+            <Route>
+              <Redirect to="/" />
+            </Route>
+          </Switch>
         </Router>
       </DataProvider>
     </AuthProvider>

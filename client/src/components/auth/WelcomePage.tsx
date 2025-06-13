@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'wouter';
 import { Shield, Stethoscope, Heart, User } from 'lucide-react';
 
 const WelcomePage: React.FC = () => {
@@ -48,18 +49,18 @@ const WelcomePage: React.FC = () => {
         {roles.map((role, index) => {
           const IconComponent = role.icon;
           return (
-            <div
+            <Link
               key={role.title}
-              className="bg-white/90 text-teal-900 rounded-xl p-8 text-center shadow-2xl hover:shadow-teal-300/30 hover:-translate-y-2 transition-all duration-300 cursor-pointer animate-fade-in"
+              to={role.path}
+              className="bg-white/90 text-teal-900 rounded-xl p-8 text-center shadow-2xl hover:shadow-teal-300/30 hover:-translate-y-2 transition-all duration-300 cursor-pointer animate-fade-in block"
               style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => window.location.href = role.path}
             >
               <div className="bg-teal-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 shadow-inner">
                 <IconComponent className="h-8 w-8 text-teal-700" />
               </div>
               <h2 className="text-2xl font-bold mb-3 font-display">{role.title}</h2>
               <p className="text-teal-700 text-sm opacity-80">{role.description}</p>
-            </div>
+            </Link>
           );
         })}
       </section>
