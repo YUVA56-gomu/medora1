@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'wouter';
 import { useAuth } from '../../context/AuthContext';
 import { Shield, Stethoscope, Heart, User, ArrowLeft } from 'lucide-react';
 
@@ -12,6 +13,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ role }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const [, setLocation] = useLocation();
 
   const getRoleConfig = () => {
     switch (role) {
@@ -57,7 +59,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ role }) => {
     try {
       const success = await login(email, password, role);
       if (success) {
-        window.location.href = '/dashboard';
+        setLocation('/dashboard');
       } else {
         setError('Invalid credentials. Please try again.');
       }
@@ -77,7 +79,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ role }) => {
     <div className="min-h-screen bg-gradient-to-br from-teal-800 to-emerald-700 text-white flex items-center justify-center p-4">
       {/* Back Button */}
       <button
-        onClick={() => window.location.href = '/'}
+        onClick={() => setLocation('/')}
         className="absolute top-6 left-6 flex items-center space-x-2 text-white/80 hover:text-white transition-colors"
       >
         <ArrowLeft className="w-5 h-5" />

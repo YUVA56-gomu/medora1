@@ -69,7 +69,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Find user with matching email and role
     const foundUser = mockUsers.find(u => u.email === email && u.role === role);
     
-    if (foundUser) {
+    // For demo purposes, accept any password for valid users
+    if (foundUser && password) {
       setUser(foundUser);
       localStorage.setItem('medora_user', JSON.stringify(foundUser));
       setLoading(false);
