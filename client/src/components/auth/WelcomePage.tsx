@@ -7,25 +7,29 @@ const WelcomePage: React.FC = () => {
     {
       title: 'Super Admin',
       icon: Shield,
-      path: '/login/super_admin',
+      loginPath: '/login/super_admin',
+      registerPath: '/register/super_admin',
       description: 'System administration and user management'
     },
     {
       title: 'Doctor',
       icon: Stethoscope,
-      path: '/login/doctor',
+      loginPath: '/login/doctor',
+      registerPath: '/register/doctor',
       description: 'Patient care and medical consultations'
     },
     {
       title: 'Nurse',
       icon: Heart,
-      path: '/login/nurse',
+      loginPath: '/login/nurse',
+      registerPath: '/register/nurse',
       description: 'Patient care and daily health monitoring'
     },
     {
       title: 'Patient',
       icon: User,
-      path: '/login/patient',
+      loginPath: '/login/patient',
+      registerPath: '/register/patient',
       description: 'Access your health records and appointments'
     }
   ];
@@ -49,18 +53,32 @@ const WelcomePage: React.FC = () => {
         {roles.map((role, index) => {
           const IconComponent = role.icon;
           return (
-            <Link
+            <div
               key={role.title}
-              to={role.path}
-              className="bg-white/90 text-teal-900 rounded-xl p-8 text-center shadow-2xl hover:shadow-teal-300/30 hover:-translate-y-2 transition-all duration-300 cursor-pointer animate-fade-in block"
+              className="bg-white/90 text-teal-900 rounded-xl p-8 text-center shadow-2xl hover:shadow-teal-300/30 hover:-translate-y-2 transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="bg-teal-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 shadow-inner">
                 <IconComponent className="h-8 w-8 text-teal-700" />
               </div>
               <h2 className="text-2xl font-bold mb-3 font-display">{role.title}</h2>
-              <p className="text-teal-700 text-sm opacity-80">{role.description}</p>
-            </Link>
+              <p className="text-teal-700 text-sm opacity-80 mb-6">{role.description}</p>
+              
+              <div className="space-y-3">
+                <Link
+                  to={role.loginPath}
+                  className="block w-full bg-teal-700 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition duration-300 font-semibold"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to={role.registerPath}
+                  className="block w-full bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition duration-300 font-semibold"
+                >
+                  Register
+                </Link>
+              </div>
+            </div>
           );
         })}
       </section>

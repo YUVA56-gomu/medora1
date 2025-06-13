@@ -4,6 +4,7 @@ import { User } from '../types';
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string, role: string) => Promise<boolean>;
+  register: (userData: { name: string; email: string; password: string; role: string }) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
   loading: boolean;
@@ -53,6 +54,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
+  const register = async (userData: { name: string; email: string; password: string; role: string }): Promise<boolean> => {
+    setLoading(true);
+    
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...userData,
+          isActive: true
+        }),
+      });
+      
+      if (response.ok) {
+        const newUser = await response.json();
+        setUser(newUser);
+        localStorage.setItem('medora_user', JSON.stringify(newUser));
+        setLoading(false);
+        return true;
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+    }
+    
+    setLoading(false);
+    return false;
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('medora_user');
@@ -64,6 +95,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider value={{
       user,
       login,
+      register,
       logout,
       isAuthenticated,
       loading,

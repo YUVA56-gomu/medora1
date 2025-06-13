@@ -5,6 +5,7 @@ import Layout from './components/common/Layout';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import WelcomePage from './components/auth/WelcomePage';
 import LoginPage from './components/auth/LoginPage';
+import RegisterPage from './components/auth/RegisterPage';
 import SuperAdminDashboard from './components/dashboards/SuperAdminDashboard';
 import DoctorDashboard from './components/dashboards/DoctorDashboard';
 import NurseDashboard from './components/dashboards/NurseDashboard';
@@ -41,6 +42,8 @@ const App: React.FC = () => {
             <Route path="/">
               <WelcomePage />
             </Route>
+            
+            {/* Login Routes */}
             <Route path="/login/super_admin">
               <LoginPage role="super_admin" />
             </Route>
@@ -52,6 +55,20 @@ const App: React.FC = () => {
             </Route>
             <Route path="/login/patient">
               <LoginPage role="patient" />
+            </Route>
+
+            {/* Registration Routes */}
+            <Route path="/register/super_admin">
+              <RegisterPage role="super_admin" />
+            </Route>
+            <Route path="/register/doctor">
+              <RegisterPage role="doctor" />
+            </Route>
+            <Route path="/register/nurse">
+              <RegisterPage role="nurse" />
+            </Route>
+            <Route path="/register/patient">
+              <RegisterPage role="patient" />
             </Route>
 
             {/* Protected Dashboard Route */}

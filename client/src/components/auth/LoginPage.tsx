@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation, Link } from 'wouter';
 import { useAuth } from '../../context/AuthContext';
 import { Shield, Stethoscope, Heart, User, ArrowLeft } from 'lucide-react';
 
@@ -157,7 +157,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ role }) => {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-teal-700">
-            Need help? <a href="#" className="font-medium text-teal-800 hover:text-teal-900 transition-colors">Contact support</a>
+            Don't have an account?{' '}
+            <Link 
+              to={`/register/${role}`} 
+              className="font-medium text-teal-800 hover:text-teal-900 transition-colors"
+            >
+              Register here
+            </Link>
           </p>
         </div>
 
