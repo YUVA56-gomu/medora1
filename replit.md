@@ -106,6 +106,10 @@ MEDORA is a comprehensive healthcare management system built with a full-stack T
 ```
 Changelog:
 - June 13, 2025. Initial setup
+- June 13, 2025. Successfully migrated from Bolt to Replit environment
+- June 13, 2025. Added PostgreSQL database with comprehensive healthcare schema
+- June 13, 2025. Implemented authentication API with database integration
+- June 13, 2025. Converted React Router to wouter for Replit compatibility
 ```
 
 ## User Preferences

@@ -11,49 +11,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for demonstration
-const mockUsers: User[] = [
-  {
-    id: 1,
-    name: 'Admin User',
-    email: 'admin@medora.com',
-    password: 'demo123',
-    role: 'super_admin',
-    avatar: null,
-    isActive: true,
-    createdAt: new Date('2024-01-01'),
-  },
-  {
-    id: 2,
-    name: 'Dr. Sarah Johnson',
-    email: 'doctor@medora.com',
-    password: 'demo123',
-    role: 'doctor',
-    avatar: null,
-    isActive: true,
-    createdAt: new Date('2024-01-01'),
-  },
-  {
-    id: 3,
-    name: 'Nurse Mary Smith',
-    email: 'nurse@medora.com',
-    password: 'demo123',
-    role: 'nurse',
-    avatar: null,
-    isActive: true,
-    createdAt: new Date('2024-01-01'),
-  },
-  {
-    id: 4,
-    name: 'John Doe',
-    email: 'patient@medora.com',
-    password: 'demo123',
-    role: 'patient',
-    avatar: null,
-    isActive: true,
-    createdAt: new Date('2024-01-01'),
-  },
-];
+
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -71,18 +29,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string, role: string): Promise<boolean> => {
     setLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Find user with matching email and role
-    const foundUser = mockUsers.find(u => u.email === email && u.role === role);
-    
-    // For demo purposes, accept any password for valid users
-    if (foundUser && password) {
-      setUser(foundUser);
-      localStorage.setItem('medora_user', JSON.stringify(foundUser));
-      setLoading(false);
-      return true;
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, role }),
+      });
+      
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+        localStorage.setItem('medora_user', JSON.stringify(userData));
+        setLoading(false);
+        return true;
+      }
+    } catch (error) {
+      console.error('Login error:', error);
     }
     
     setLoading(false);

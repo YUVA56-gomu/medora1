@@ -11,14 +11,6 @@ export type {
   InsertNotification,
   InsertTask
 } from '@shared/schema';
-  description: string;
-  assignedTo: string;
-  patientId?: string;
-  priority: 'low' | 'medium' | 'high';
-  status: 'pending' | 'in_progress' | 'completed';
-  dueDate: string;
-  createdAt: string;
-}
 
 export interface DashboardStats {
   totalUsers?: number;
