@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to MEDORA{% endblock %}
+
+{% block content %}
+<div class="min-vh-100 gradient-bg text-white">
+    <!-- Header Section -->
+    <header class="text-center py-5">
+        <div class="container">
+            <h1 class="display-2 font-display fw-bold mb-4 fade-in">
+                Welcome to <span class="text-warning">MEDORA</span>
+            </h1>
+            <p class="lead fs-3 opacity-75 mb-5 fade-in">
+                Seamless Healthcare Management for Every Role
+            </p>
+        </div>
+    </header>
+
+    <!-- Feature Cards -->
+    <section class="container my-5">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center border-0 shadow-lg fade-in" style="animation-delay: 0.1s;">
+                    <div class="card-body p-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-shield-alt text-medora-teal fs-2"></i>
+                        </div>
+                        <h3 class="card-title font-display text-dark mb-3">Super Admin</h3>
+                        <p class="card-text text-muted mb-4">System administration and user management</p>
+                        <a href="{% url 'accounts:role_login' 'super_admin' %}" class="btn btn-medora">Login</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center border-0 shadow-lg fade-in" style="animation-delay: 0.2s;">
+                    <div class="card-body p-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-stethoscope text-medora-teal fs-2"></i>
+                        </div>
+                        <h3 class="card-title font-display text-dark mb-3">Doctor</h3>
+                        <p class="card-text text-muted mb-4">Patient care and medical consultations</p>
+                        <a href="{% url 'accounts:role_login' 'doctor' %}" class="btn btn-medora">Login</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center border-0 shadow-lg fade-in" style="animation-delay: 0.3s;">
+                    <div class="card-body p-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-heart text-medora-teal fs-2"></i>
+                        </div>
+                        <h3 class="card-title font-display text-dark mb-3">Nurse</h3>
+                        <p class="card-text text-muted mb-4">Patient care and daily health monitoring</p>
+                        <a href="{% url 'accounts:role_login' 'nurse' %}" class="btn btn-medora">Login</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center border-0 shadow-lg fade-in" style="animation-delay: 0.4s;">
+                    <div class="card-body p-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-user text-medora-teal fs-2"></i>
+                        </div>
+                        <h3 class="card-title font-display text-dark mb-3">Patient</h3>
+                        <p class="card-text text-muted mb-4">Access your health records and appointments</p>
+                        <a href="{% url 'accounts:role_login' 'patient' %}" class="btn btn-medora">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-4 font-display fw-bold mb-4">Comprehensive Healthcare Management</h2>
+            <p class="lead fs-4 opacity-75">Everything you need for modern healthcare administration</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                    <i class="fas fa-shield-alt fs-1"></i>
+                </div>
+                <h3 class="h4 fw-semibold mb-3">Secure & Compliant</h3>
+                <p class="opacity-75">Enterprise-grade security with role-based access control</p>
+            </div>
+            
+            <div class="col-md-4 text-center">
+                <div class="bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                    <i class="fas fa-heart fs-1"></i>
+                </div>
+                <h3 class="h4 fw-semibold mb-3">Patient-Centered</h3>
+                <p class="opacity-75">Streamlined workflows focused on quality patient care</p>
+            </div>
+            
+            <div class="col-md-4 text-center">
+                <div class="bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                    <i class="fas fa-stethoscope fs-1"></i>
+                </div>
+                <h3 class="h4 fw-semibold mb-3">Integrated Platform</h3>
+                <p class="opacity-75">All healthcare management tools in one unified system</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 mt-auto bg-dark bg-opacity-25">
+        <p class="mb-0 opacity-75">
+            Built with <i class="fas fa-heart text-danger"></i> for Hackathon 2024 | 
+            <span class="fw-semibold">Team MEDORA</span>
+        </p>
+    </footer>
+</div>
+{% endblock %}

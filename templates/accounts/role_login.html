@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ role_display }} Login - MEDORA{% endblock %}
+
+{% block content %}
+<div class="min-vh-100 gradient-bg d-flex align-items-center justify-content-center">
+    <!-- Back Button -->
+    <a href="{% url 'welcome' %}" class="position-absolute top-0 start-0 m-4 text-white text-decoration-none">
+        <i class="fas fa-arrow-left me-2"></i>Back to Home
+    </a>
+
+    <!-- Login Container -->
+    <div class="card shadow-lg border-0" style="max-width: 400px; width: 100%;">
+        <div class="card-body p-5">
+            <div class="text-center mb-4">
+                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    {% if role == 'super_admin' %}
+                        <i class="fas fa-shield-alt text-medora-teal fs-2"></i>
+                    {% elif role == 'doctor' %}
+                        <i class="fas fa-stethoscope text-medora-teal fs-2"></i>
+                    {% elif role == 'nurse' %}
+                        <i class="fas fa-heart text-medora-teal fs-2"></i>
+                    {% else %}
+                        <i class="fas fa-user text-medora-teal fs-2"></i>
+                    {% endif %}
+                </div>
+                <h1 class="h3 font-display fw-bold text-dark mb-2">{{ role_display }} Login</h1>
+                <p class="text-muted">Enter your credentials to access the dashboard</p>
+            </div>
+
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label fw-medium">Email</label>
+                    <input type="text" class="form-control" name="username" id="id_username" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="id_password" class="form-label fw-medium">Password</label>
+                    <input type="password" class="form-control" name="password" id="id_password" required>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <button type="button" class="btn btn-link p-0 text-medora-teal" onclick="useDemoCredentials()">
+                        Use Demo Credentials
+                    </button>
+                    <a href="#" class="text-medora-teal text-decoration-none">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-medora w-100 py-2 fw-semibold">
+                    Sign in
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted mb-0">
+                    Need help? <a href="#" class="text-medora-teal text-decoration-none">Contact support</a>
+                </p>
+            </div>
+
+            <!-- Demo Credentials Info -->
+            {% if demo_credentials %}
+            <div class="mt-4 p-3 bg-light rounded">
+                <h6 class="fw-semibold text-dark mb-2">Demo Credentials:</h6>
+                <p class="mb-1"><strong>Email:</strong> {{ demo_credentials.email }}</p>
+                <p class="mb-0"><strong>Password:</strong> {{ demo_credentials.password }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function useDemoCredentials() {
+    {% if demo_credentials %}
+    document.getElementById('id_username').value = '{{ demo_credentials.email }}';
+    document.getElementById('id_password').value = '{{ demo_credentials.password }}';
+    {% endif %}
+}
+</script>
+{% endblock %}
